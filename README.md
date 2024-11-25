@@ -1,0 +1,2 @@
+# CS Foundations
+As I finish up my university degree and prepare for my career, I realize that nothing is more important to my success than fundamental computer science principles. With a strong foundation, I can learn and do anything.

@@ -50,7 +50,7 @@ Rest APIs have problems, however, with over-fetching or under-fetching data. Ima
 How do we efficiently get the data we need??
 
 ### GraphQL
-To solve this problem of over-fetching and under-fetching data with REST APIs, GraphQL was created. With GraphQL, the client can specify the exact data it needs within one request. It does not use the 4 HTTP methods like REST, it typically only operates through a single HTTP POST endpoint. In GraphQL, there are two primary types of operations: queries and mutations. Queries are utilized to retrieve data, while mutations are employed for modifying data on the server.
+To solve this problem of over-fetching and under-fetching data with REST APIs, GraphQL was created. With GraphQL, the client can specify the exact data it needs within one request. It does not use the 4 HTTP methods like REST, it typically only operates through a single HTTP POST endpoint. In GraphQL, there are two primary types of operations: **queries** and **mutations**. Queries are utilized to retrieve data, while mutations are employed for modifying data on the server.
 
 ```
 {
@@ -148,3 +148,11 @@ message User {
 ### Webhooks
 Webhooks are HTTP callbacks that enable real-time data push between systems. They act as "reverse APIs" where the server pushes data to client-specified endpoints when events occur, eliminating the need for polling. Webhooks use standard HTTP POST requests with JSON or XML payloads and require the receiving endpoint to be publicly accessible. They excel at event-driven architectures but can be unreliable since there's no built-in retry mechanism or delivery guarantee. Common uses include payment processing notifications, CI/CD pipeline triggers, and CRM integrations. Webhooks are complementary to REST APIs, not a replacement, as they serve different purposes: REST for request-response interactions, Webhooks for event notifications.
 
+## API Design
+This section will discuss REST APIs, since they are most commonly used. Disregarding the implementation of the interface, it is important to design the method signature and return value well. For public-facing APIs, there can be many other applications reliant on the protocols you define, and changing them could break their applications. If possible, aim for **backwards compatibility** when updating signatures by making the new parameters optional. If not possible, it is good to use **versioning** so that the old API still works, while providing a new API altogether. Deprecating the older version prompts developers to transition to the latest version.
+
+When designing GET endpoints, **pagination** is a helpful tool when fetching a large amount of data. The client can add an offset and limit as a query. They should also be read-only implemented so that caching the results is reliable. 
+
+Endpoints should also be named appropriately and not conflict. 
+
+The Stripe and Twitter APIs are good examples to look at.

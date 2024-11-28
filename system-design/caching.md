@@ -1,5 +1,5 @@
 # Caching
-Caching is simply the process of making copies of data. Typically data is copied to a location where it can be accessed faster. On single computers, RAM data is copied to the CPU cache. On browsers, static data is copied to disk, significantly faster than transferring it across a network. On distributed systems, database/disk data is copied to RAM. It is important that copies of data do not become out of sync.
+Caching is simply the process of making copies of data. Typically data is copied to a location where it can be accessed faster. On single computers, RAM data is copied to the CPU cache. On browsers, static data is copied to disk, significantly faster than transferring it across a network. On distributed systems, database/disk data is copied to RAM. It is important that copies of data do not become out of sync. Redis is a popular in-memory caching option that is extremely fast. 
 
 ## Caching from the Client's Perspective
 When a client attempts to load data, it first checks the memory cache, then the disk cache, and finally makes a network request if not found in either cache. When a cached file is found, this is known as a **cache hit**. When a cached file is not found, this is known as a **cache miss**.

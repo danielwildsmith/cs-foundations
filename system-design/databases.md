@@ -118,3 +118,52 @@ Determining how data is partitioned among shards is done using a shard key. The 
 
 #### Challenge with Sharding
 With relational databases and their ACID properties, ensuring related tables with related data end up in the same shard can be complex. Because of this, sharding is not built in. NoSQL databases are designed with this in mind, however, and are better suited for sharding due to their "eventual consistency" model.
+
+## CAP Theorem
+In a *distributed* database system, the CAP theorem proposes a logic problem. In the event of a **P**artition, it is impossible to have both **C**onsistency and **A**vailability. 
+
+Partitions are when a leader node cannot communicate with a follower node (due to network/hardware issues), thus preventing the follower node to be updated. **P**artition tolerance implies that a system can continue to function, avoiding total shutdown.
+
+Consistency in the CAP theorem differs from the ACID consistency. Here, it means that all nodes within a system perceive the data identically at any given moment. If our system remains partitioned and data is written to the leader database, a client reading from the leader database will receive the most recent data. However, since updates to the follower database are blocked, reading from it could yield outdated data. A possible solution could be to render the follower node redundant, ensuring no outdated data is read. This introduces the concept of availability.
+
+Availablity means that even when a follower node cannot communicate with its leader, it is still able to be read from. Of course, it is not being updated and will give stale data. This of course sacrifices consistency. But it ensures that the system stays operational and can manage requests even amid failures.
+
+### Consistency or Availability?
+Prioritizing consistency or availability largely depends on the specific requirements of the application and its associated goals. 
+
+In systems such as a university's Learning Management System (LMS), high availability might be more crucial. For instance, if a student is attempting to submit an assignment, the LMS must be available to accept the submission. Even if there's a minor delay in updating the grade, it is unlikely to impact the operation negatively.
+
+In scenarios where the accuracy of data is absolutely crucial, such as banking and healthcare systems, consistency should be prioritized. In a banking system, the account balance must be correct and consistent across all nodes. If a network partition occurs, it might be acceptable to stop the operations, but still ensuring that the data remains consistent. In a similar manner, in a healthcare setting, having accurate and up-to-date medical records is a matter of life and death and inconsistent data will lead to severe consequences, so prioritizing consistency is critical.
+
+Many modern databases dynamically adjust between being more consistent and less available, or more available and less consistent.
+
+![CAP Theorem](./images/cap-theorem.avif)
+
+### PACELC
+Probably a more appropriate acronym to illustrate the problem...
+![Pacelc](./images/pacelc.avif)
+
+## Object Storage
+How do we store large objects like videos or images efficiently? One important thing to note is we would never query by a video, so using a traditional database seems like a bad idea.
+
+Object storage instead treats each piece of data as an object, comprising the actual data, metadata, and a unique identifier. There is no hierarchy in object storage, as opposed to a file system. Objects are stored in flat address spaces, which facilitates easier scalability compared to file storage systems, thanks to the absence of hierarchical complexity. Object storage evolved from BLOB (Binary Large Object) storage and is commonly used for storing items such as images, videos, and database backups. Prominent examples include AWS S3 and Google Cloud Storage.
+
+When retrieving data from an object store, direct reads from the object store itself are typically not performed. Instead, a network HTTP request is made directly to the object storage to fetch the data. In system design interviews, object storage is frequently employed for storing images and videos, such as through Amazon Simple Storage Service (Amazon S3).
+
+If you upload a video.mp4 to object store, this is what it might look like:
+
+```
+Key: 7b2abd-f8c9-4b3a-8f2e-9d3a5c1d6e4b
+Object Data: [The actual video file]
+System Metadata:
+  - Size: 256MB
+  - Created: 2024-11-29 14:30:00
+  - Content-Type: video/mp4
+Custom Metadata:
+  - Original_Filename: birthday_party.mp4
+  - Event_Type: Birthday
+  - Location: Home
+  - Owner: user123
+  ```
+
+Implementation-wise, it is similar to hashing. The *unique* key identifies it. 

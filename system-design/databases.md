@@ -53,7 +53,7 @@ All **transactions**, units consisting of a sequence of one or more SQL operatio
 Not only SQL. This encapsulates all non-relational databases, created to make horizontally scaling databases easier. With SQL databases, it is difficult to know how to split up the data and maintain consistency due to the complex relations. Vertical scaling is possible with SQL databases, but this has its limitations. There are several different types of NoSQL databases:
 
 ### Key-Value Databases
-Just like a hashmap, the database stores a collection of key-value pairs and the key serves as a unique identifier. The keys and values can range from simple objects to complex objects. They are schemaless, meaning different keys and values can have completely different structures. Redis is an example.
+Just like a hashmap, the database stores a collection of key-value pairs and the key serves as a unique identifier. The keys and values can range from simple objects to complex objects. They are schemaless, meaning different keys and values can have completely different structures. Redis cache / cluster is an example. Dynamo DB, a more traditional distributed database system, is another example.
 
 ### Document Databases
 Document Databases store data as "documents". These "documents" are JSON-like. This structure is beneficial because individual fields in a document can be added/removed independently of others. An example is MongoDB.
